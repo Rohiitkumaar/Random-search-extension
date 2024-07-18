@@ -2,10 +2,15 @@
 // Template URL with "man" to be replaced
 const templateURL = "https://www.bing.com/search?q=man&form=QBLH&sp=-1&ghc=1&lq=0&pq=man&sc=11-3&qs=n&sk=&cvid=17487D35C4514CB69F2933474E2ECBEC&ghsh=0&ghacc=0&ghpl=";
 
-// Array to store unique words
 let usedWords = [];
+let searchCount = 0;
 
-// Function to generate a random word
+function incrementSearchCount() {
+  searchCount++;
+  if (searchCount >= 33) {
+    document.getElementById('cover').textContent = 'Searches completed';
+  }
+}
 function generateRandomWord() {
   const words = [
     "watermelon", "blackboard", "frog", "ship", "computer", "vampire", "dusk", "fairy",
@@ -45,22 +50,18 @@ function generateRandomWord() {
   let randomIndex = Math.floor(Math.random() * words.length);
   let randomWord = words[randomIndex];
   
-  // Ensure the word is not repeated
   while (usedWords.includes(randomWord)) {
     randomIndex = Math.floor(Math.random() * words.length);
     randomWord = words[randomIndex];
   }
 
-  // Push the word into usedWords array
   usedWords.push(randomWord);
   
   return randomWord;
 }
 
-// Array to store URLs
 const pages = [];
 
-// Generate 50 URLs with random words replacing "man"
 for (let i = 0; i < 90; i++) {
   const randomWord = generateRandomWord();
   const url = templateURL.replace("man", randomWord);
@@ -68,14 +69,19 @@ for (let i = 0; i < 90; i++) {
 }
 
 function performRandomSearch() {
+  if(searchCount < 33){
     const randomIndex = Math.floor(Math.random() * pages.length);
     const randomPage = pages[randomIndex];
     console.log("Performing search at:", randomPage);
     chrome.tabs.update({ url: randomPage });
+    incrementSearchCount()
   }
+  else{
+    clearInterval(searchInterval);
+    exit();
+  }
+}
   
-  // Perform initial search
   performRandomSearch();
-  
-  // Perform random search every 10 seconds
-  setInterval(performRandomSearch, 15000);
+ 
+  const searchInterval = setInterval(performRandomSearch, 15000);
