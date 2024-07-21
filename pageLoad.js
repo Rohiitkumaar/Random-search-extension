@@ -7,7 +7,7 @@ let searchCount = 0;
 
 function incrementSearchCount() {
   searchCount++;
-  if (searchCount >= 33) {
+  if (searchCount >= 40) {
     document.getElementById('cover').textContent = 'Searches completed';
   }
 }
@@ -69,7 +69,7 @@ for (let i = 0; i < 90; i++) {
 }
 
 function performRandomSearch() {
-  if(searchCount < 33){
+  if(searchCount < 40){
     const randomIndex = Math.floor(Math.random() * pages.length);
     const randomPage = pages[randomIndex];
     console.log("Performing search at:", randomPage);
